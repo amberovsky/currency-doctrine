@@ -1,0 +1,25 @@
+version: 2.1
+jobs:
+    build:
+        docker:
+            # Specify the version you desire here
+            - image: circleci/php:7.4.1-cli
+
+        steps:
+            - checkout
+
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "composer.lock" }}
+
+            - run: composer install -n
+
+            - save_cache:
+                  key: v1-dependencies-{{ checksum "composer.lock" }}
+                  paths:
+                      - ./vendor
+
+            - run: make phpstan
+            - run: make psalm
+            - run: make phpspec
