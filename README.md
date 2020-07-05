@@ -1,7 +1,7 @@
 # amberovsky/currency-doctrine
 
 The amberovsky/currency-doctrine package provides the ability to use
-[https://github.com/amberovsky/currency][amberovsky-currency] as a [Doctrine field type][https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html].
+[amberovsky/currency](https://github.com/amberovsky/currency) as a [Doctrine field type](https://www.doctrine-project.org/projects/doctrine-dbal/en/2.10/reference/types.html).
 
 ## Examples
 
