@@ -87,6 +87,13 @@ class CurrencyType extends Type {
      * @inheritDoc
      */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform) {
-        return $platform->getSmallIntTypeDeclarationSQL(array_merge($fieldDeclaration, ['unsigned' => true]));
+        return $platform->getSmallIntTypeDeclarationSQL($fieldDeclaration);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function requiresSQLCommentHint(AbstractPlatform $platform) {
+        return true;
     }
 }

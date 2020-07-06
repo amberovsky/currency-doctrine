@@ -88,13 +88,7 @@ class CurrencyTypeSpec extends ObjectBehavior {
         $this->shouldThrow(ConversionException::class)->duringConvertToDatabaseValue($stdClass, $abstractPlatform);
     }
 
-    public function it_creates_sql_using_unsigned_smallint(AbstractPlatform $abstractPlatform) {
-        $abstractPlatform->getSmallIntTypeDeclarationSQL(['unsigned' => true])->shouldBeCalled();
-        $this->getSQLDeclaration(['unsigned' => true], $abstractPlatform);
-    }
-
-    public function it_overrides_unsigned_in_sql_using_unsigned_smallint(AbstractPlatform $abstractPlatform) {
-        $abstractPlatform->getSmallIntTypeDeclarationSQL(['unsigned' => true])->shouldBeCalled();
-        $this->getSQLDeclaration(['unsigned' => false], $abstractPlatform);
+    public function it_requires_sql_comment_hint(AbstractPlatform $platform) {
+        $this->requiresSQLCommentHint($platform)->shouldReturn(true);
     }
 }

@@ -7,37 +7,44 @@ The amberovsky/currency-doctrine package provides the ability to use
 
 ### Configuration
 
-**It requires CurrencyFactory to be injected in via CurrencyType::setCurrencyFactory method. Use your current DI mechanism to do that.**
+It requires CurrencyFactory to be injected in via CurrencyType::setCurrencyFactory method. Use your current DI mechanism to do that.
 
 To configure Doctrine to use amberovsky/currency as a field type, you'll need to set up the following in your bootstrap:
 
 ``` php
-\Doctrine\DBAL\Types\Type::addType('Currency', 'Amberovsky\Money\Currency\Doctrine\CurrencyType');
+use Doctrine\DBAL\Types\Type;
+use Amberovsky\Money\Currency\Doctrine\CurrencyType;
+use Amberovsky\Money\Currency\CurrencyFactory;
+
+$currencyFactory = ...; // Get CurrencyFactory instance somehow
+
+if (!Type::hasType(CurrencyType::NAME)) {
+    Type::addType(CurrencyType::NAME, CurrencyType::class);
+    /** @var CurrencyType $currencyType */
+    $currencyType = Type::getType(CurrencyType::NAME);
+    $currencyType->setCurrencyFactory($currencyFactory);
+}
 ```
 
-In Symfony:
+#### Symfony
 
-``` yaml
-# config/packages/doctrine.yaml
-doctrine:
-    dbal:
-        types:
-            Currency: Amberovsky\Money\Currency\Doctrine\CurrencyType
-```
 
-In Zend Framework:
+Add this to your `Kernel.php`:
 
 ```php
-<?php
-// module.config.php
-use Amberovsky\Money\Currency\Doctrine\CurrencyType;
+    /**
+     * @inheritDoc
+     */
+    protected function initializeContainer() {
+        parent::initializeContainer();
 
-return [
-    'doctrine' => [
-        'configuration' => [
-            'orm_default' => [
-                'types' => [
-                    CurrencyType::NAME => CurrencyType::class,
+        if (!Type::hasType(CurrencyType::NAME)) {
+            Type::addType(CurrencyType::NAME, CurrencyType::class);
+            /** @var CurrencyType $currencyType */
+            $currencyType = Type::getType(CurrencyType::NAME);
+            $currencyType->setCurrencyFactory($this->container->get(CurrencyFactory::class));
+        }
+    }
 ```
 
 ### Usage
